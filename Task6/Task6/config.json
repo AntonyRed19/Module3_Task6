@@ -1,0 +1,9 @@
+﻿{
+  "LogConfig": {
+    "DirectoryPath": "Logs/",
+    "BackUpPath": "BackUp/",
+    "ExtensionFile": ".txt",
+    "NameFormat": "hh.mm.ss dd.MM.yyyy",
+    "BackUp": 20
+  }
+}
