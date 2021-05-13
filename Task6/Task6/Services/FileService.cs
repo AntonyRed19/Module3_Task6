@@ -8,7 +8,7 @@ using Task6.Services.Abstractions;
 
 namespace Task6.Services
 {
-    public class FileService
+    public class FileService : IFileService
     {
         public IDisposable CreateStreamForWrite(string path)
         {

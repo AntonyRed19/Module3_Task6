@@ -12,9 +12,10 @@ namespace Task6.Services
     {
         public void CreateDirectory(string path)
         {
-           Directory.CreateDirectory(path);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
         }
-
-        public bool Exists(string path) => Directory.Exists(path);
     }
 }

@@ -8,8 +8,6 @@ namespace Task6.Services.Abstractions
 {
     public interface IDirectoryService
     {
-        bool Exists(string path);
-
         void CreateDirectory(string path);
     }
 }

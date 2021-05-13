@@ -20,7 +20,7 @@ namespace Task6.Services
             _fileService = LocatorService.FileService;
 
             var config = GetConfig();
-
+            _loggerConfig = config.LoggerConfig;
         }
 
         public LoggerConfig LoggerConfig => _loggerConfig;
