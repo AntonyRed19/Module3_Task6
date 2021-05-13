@@ -8,5 +8,12 @@ namespace Task6.Services.Abstractions
 {
     public interface IFileService
     {
+        IDisposable CreateStreamForWrite(string path);
+
+        void WriteToStream(IDisposable stream, string text);
+
+        string ReadAllText(string path);
+
+        DateTime GetCreationTime(string path);
     }
 }
