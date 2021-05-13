@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Task6.Config
 {
-    public class Config
+    public class GeneralConfig
     {
         public LoggerConfig LoggerConfig { get; set; }
     }
