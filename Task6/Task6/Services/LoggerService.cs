@@ -22,17 +22,33 @@ namespace Task6.Services
             _loggerConfig = config.LoggerConfig;
             _fileService = LocatorService.FileService;
             _directoryService = LocatorService.DirectoryService;
+            Init();
         }
 
+        public event Action BackUp;
         public void LogMassage(string message)
         {
             var log = $"{DateTime.UtcNow}:{message}";
+            _fileService.WriteToStream(_fileStreamWrite, log);
             Console.WriteLine(log);
         }
 
         public void DoBackUp()
         {
-            throw new NotImplementedException();
+        }
+
+        private void Init()
+        {
+            var dirPath = _loggerConfig.DirectoryPath;
+            var backUpPath = _loggerConfig.BackUpPath;
+
+            _directoryService.CreateDirectory(dirPath);
+            _directoryService.CreateDirectory(backUpPath);
+
+            var fileName = $"{DateTime.UtcNow.ToString(_loggerConfig.NameFormat)}";
+            var filePath = $"{dirPath}{fileName}{_loggerConfig.ExtensionFile}";
+
+            _fileStreamWrite = (StreamWriter)_fileService.CreateStreamForWrite(filePath);
         }
     }
 }

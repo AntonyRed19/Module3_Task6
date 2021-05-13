@@ -8,6 +8,7 @@ namespace Task6.Services.Abstractions
 {
     public interface ILoggerService
     {
+        public event Action BackUp;
         void LogMassage(string message);
         void DoBackUp();
     }
