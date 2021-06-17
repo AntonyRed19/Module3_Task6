@@ -15,40 +15,61 @@ namespace Task6.Services
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
         private StreamWriter _fileStreamWrite;
-
+        private int _currentLog;
+        private static object locker = new object();
         public LoggerService()
         {
             var config = LocatorService.ConfigService;
             _loggerConfig = config.LoggerConfig;
+
             _fileService = LocatorService.FileService;
             _directoryService = LocatorService.DirectoryService;
+            _currentLog = 0;
             Init();
         }
 
-        public event Action BackUp;
+        public event ILoggerService.CheckBackUp BackUpHandler;
+
         public void LogMassage(string message)
         {
             var log = $"{DateTime.UtcNow}:{message}";
-            _fileService.WriteToStream(_fileStreamWrite, log);
-            Console.WriteLine(log);
+            _fileService.WriteToStreamAsync(_fileStreamWrite, log);
+            _currentLog++;
         }
 
         public void DoBackUp()
         {
+            lock (locker)
+            {
+                var backup = _loggerConfig.BackUp;
+                if (_currentLog == backup)
+                {
+                    _currentLog = 0;
+                    Invoke();
+                }
+            }
         }
 
         private void Init()
         {
             var dirPath = _loggerConfig.DirectoryPath;
-            var backUpPath = _loggerConfig.BackUpPath;
+            var backupPath = _loggerConfig.BackUpPath;
 
             _directoryService.CreateDirectory(dirPath);
-            _directoryService.CreateDirectory(backUpPath);
+            _directoryService.CreateDirectory(backupPath);
 
             var fileName = $"{DateTime.UtcNow.ToString(_loggerConfig.NameFormat)}";
             var filePath = $"{dirPath}{fileName}{_loggerConfig.ExtensionFile}";
 
-            _fileStreamWrite = (StreamWriter)_fileService.CreateStreamForWrite(filePath);
+            _fileStreamWrite = _fileService.CreateStreamForWrite(filePath);
+        }
+
+        private void Invoke()
+        {
+            if (BackUpHandler != null)
+            {
+                BackUpHandler();
+            }
         }
     }
 }

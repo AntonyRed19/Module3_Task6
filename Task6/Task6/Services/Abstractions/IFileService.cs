@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,9 @@ namespace Task6.Services.Abstractions
 {
     public interface IFileService
     {
-        IDisposable CreateStreamForWrite(string path);
+        StreamWriter CreateStreamForWrite(string path);
 
-        void WriteToStream(IDisposable stream, string text);
+        void WriteToStreamAsync(StreamWriter stream, string text);
 
         string ReadAllText(string path);
 
